@@ -19,7 +19,7 @@ main(int argc, char *argv[])
 {
     char *buf;
     char *ident;
-    int write_size_as_macro = 0, write_guard = 0;
+    int write_size_as_macro = 0, write_guard = 0, add_hex_offset = 0;
     unsigned int i, file_size, need_comma;
 
     FILE *f_input, *f_output;
@@ -34,15 +34,20 @@ main(int argc, char *argv[])
         for(int x=4; x < argc;x++)
         {
             if (!strcmp(argv[x],"--define-size-as-macro"))
-                {
-                    write_size_as_macro = 1;
-                    continue;
-                }
+            {
+                write_size_as_macro = 1;
+                continue;
+            }
             if (!strcmp(argv[x], "--create-guard"))
-                {
-                    write_guard = 1;
-                    continue;
-                }
+            {
+                write_guard = 1;
+                continue;
+            }
+            if (!strcmp(argv[x], "--add-hex-offset"))
+            {
+                add_hex_offset = 1;
+                continue;
+            }
         }
     }
 
@@ -83,7 +88,12 @@ main(int argc, char *argv[])
         else
             need_comma = 1;
         if ((i % 16) == 0)
-            fprintf(f_output, "\n/%c0x%08x%c/", '*', i, '*');
+        {
+            if (add_hex_offset)
+                fprintf(f_output, "\n/%c0x%08x%c/", '*', i, '*');
+            else
+                fprintf(f_output, "\n\t");
+        }
         fprintf(f_output, "0x%.2x", buf[i] & 0xff);
     }
     fprintf(f_output, "\n};\n\n");
