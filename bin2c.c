@@ -19,6 +19,7 @@ main(int argc, char *argv[])
 {
     char *buf;
     char *ident;
+    int write_size_as_macro = 0;
     unsigned int i, file_size, need_comma;
 
     FILE *f_input, *f_output;
@@ -27,6 +28,17 @@ main(int argc, char *argv[])
         fprintf(stderr, "Usage: %s binary_file output_file array_name\n",
                 argv[0]);
         return -1;
+    }
+    if (argc > 4)
+    {
+        for(int x=5; x < argc;x++)
+        {
+            if (!strcmp(argv[x],"--define-size-as-macro")
+                {
+                    write_size_as_macro = 1;
+                    continue;
+                }
+        }
     }
 
     f_input = fopen(argv[1], "rb");
@@ -55,8 +67,8 @@ main(int argc, char *argv[])
     ident = argv[3];
 
     need_comma = 0;
-
-    fprintf(f_output, "const char %s[%i] = {", ident, file_size);
+    fprintf(f_output, (write_size_as_macro) ? "#define %s_length %i\n":"const int %s_length = %i;\n", ident, file_size);
+    fprintf(f_output, "const char %s[%s_length] = {", ident, ident);
     for (i = 0; i < file_size; ++i) {
         if (need_comma)
             fprintf(f_output, ", ");
@@ -67,7 +79,6 @@ main(int argc, char *argv[])
         fprintf(f_output, "0x%.2x", buf[i] & 0xff);
     }
     fprintf(f_output, "\n};\n\n");
-    fprintf(f_output, "const int %s_length = %i;\n", ident, file_size);
     fclose(f_output);
 
     return 0;
