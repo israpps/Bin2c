@@ -25,7 +25,12 @@ main(int argc, char *argv[])
     FILE *f_input, *f_output;
 
     if (argc < 4) {
-        fprintf(stderr, "Usage: %s binary_file output_file array_name\n",
+        fprintf(stderr, "Usage: %s binary_file output_file array_name {OPTIONS}\n"
+                        "\n"
+                        "Available Options are:\n"
+                        "\t[--define-size-as-macro]: size is defined as macro (unsigned int variable is used otherwise)\n"
+                        "\t[--create-guard]: Adds Header guard to the file\n"
+                        "\t[--add-hex-offset]: instead of adding '\\t' at the beginning of each row, the hex offset of that row will be printed inside a comment\n",
                 argv[0]);
         return -1;
     }
