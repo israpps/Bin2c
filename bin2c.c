@@ -86,7 +86,7 @@ main(int argc, char *argv[])
         fprintf(f_output, "#ifndef %s_DEFINED\n#define %s_DEFINED\n", ident, ident);
     
     fprintf(f_output, (write_size_as_macro) ? "#define %s_length %i\n":"const int %s_length = %i;\n", ident, file_size);
-    fprintf(f_output, "const char %s[%s_length] = {", ident, ident);
+    fprintf(f_output, "const unsigned char %s[%s_length] = {", ident, ident);
     for (i = 0; i < file_size; ++i) {
         if (need_comma)
             fprintf(f_output, ", ");
