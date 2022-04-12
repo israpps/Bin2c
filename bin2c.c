@@ -62,8 +62,8 @@ main(int argc, char *argv[])
             fprintf(f_output, ", ");
         else
             need_comma = 1;
-        if ((i % 16) == 0)
-            fprintf(f_output, "//0x%08x\n\t", i);
+        if (((i % 16) == 0) && i != 0)
+            fprintf(f_output, "\n/%c0x%08x%c/", '*', i, '*');
         fprintf(f_output, "0x%.2x", buf[i] & 0xff);
     }
     fprintf(f_output, "\n};\n\n");
