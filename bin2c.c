@@ -72,6 +72,9 @@ main(int argc, char *argv[])
     ident = argv[3];
 
     need_comma = 0;
+    if (write_guard)
+        fprintf(f_output, "#ifndef %s_DEFINED\n#define %s_DEFINED\n", ident, ident);
+    
     fprintf(f_output, (write_size_as_macro) ? "#define %s_length %i\n":"const int %s_length = %i;\n", ident, file_size);
     fprintf(f_output, "const char %s[%s_length] = {", ident, ident);
     for (i = 0; i < file_size; ++i) {
@@ -84,6 +87,8 @@ main(int argc, char *argv[])
         fprintf(f_output, "0x%.2x", buf[i] & 0xff);
     }
     fprintf(f_output, "\n};\n\n");
+    if (write_guard)
+        fprintf(f_output, "#endif //%s_DEFINED\n\n", ident);
     fclose(f_output);
 
     return 0;
