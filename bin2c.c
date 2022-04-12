@@ -62,7 +62,7 @@ main(int argc, char *argv[])
             fprintf(f_output, ", ");
         else
             need_comma = 1;
-        if ((i % 11) == 0)
+        if ((i % 16) == 0)
             fprintf(f_output, "//0x%08x\n\t", i,);
         fprintf(f_output, "0x%.2x", buf[i] & 0xff);
     }
