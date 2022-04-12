@@ -31,7 +31,7 @@ main(int argc, char *argv[])
     }
     if (argc > 4)
     {
-        for(int x=5; x < argc;x++)
+        for(int x=4; x < argc;x++)
         {
             if (!strcmp(argv[x],"--define-size-as-macro"))
                 {
