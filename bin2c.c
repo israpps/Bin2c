@@ -19,7 +19,7 @@ main(int argc, char *argv[])
 {
     char *buf;
     char *ident;
-    int write_size_as_macro = 0;
+    int write_size_as_macro = 0, write_guard = 0;
     unsigned int i, file_size, need_comma;
 
     FILE *f_input, *f_output;
@@ -33,9 +33,14 @@ main(int argc, char *argv[])
     {
         for(int x=5; x < argc;x++)
         {
-            if (!strcmp(argv[x],"--define-size-as-macro")
+            if (!strcmp(argv[x],"--define-size-as-macro"))
                 {
                     write_size_as_macro = 1;
+                    continue;
+                }
+            if (!strcmp(argv[x], "--create-guard"))
+                {
+                    write_guard = 1;
                     continue;
                 }
         }
