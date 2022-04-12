@@ -23,7 +23,7 @@ jobs:
     - name: Compile project
       run: |
         DATEE=`date '+[%Y-%m-%d]'`
-        mv LICENSE LICENSE.TXT
+        mv LICENCE LICENSE.TXT
         mkdir build
         cd build
         cmake .. -DCMAKE_BUILD_TYPE=Release
