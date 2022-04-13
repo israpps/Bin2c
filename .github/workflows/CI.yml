@@ -37,6 +37,7 @@ jobs:
         name: TITLE_CFG_MAKER
         path: |
              build/Bin2c.7z
+             build/Bin2c.exe
 
     - name: Deploy pre-release
       uses: softprops/action-gh-release@v1
@@ -46,6 +47,7 @@ jobs:
         fail_on_unmatched_files: true
         files: |
             build/Bin2c.7z
+            build/Bin2c.exe
         name: "Latest build"
         tag_name: "Latest"
         prerelease: true
