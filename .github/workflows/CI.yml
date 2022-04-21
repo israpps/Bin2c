@@ -35,16 +35,16 @@ jobs:
         cd build
         cmake .. -DCMAKE_BUILD_TYPE=Release
         make clean all
-        7z a -t7z ${{ github.event.repository.name }}.7z ${{ github.event.repository.name }}* ../LICENSE.TXT ../README.md
+        7z a -t7z ${{ github.event.repository.name }}-${{ matrix.toolchain }}.7z ../LICENCE.TXT ../README.md "${{ github.event.repository.name }}*"
         ls -r
 
     - name: Upload artifacts
       if: ${{ success() }}
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ github.event.repository.name }}
+        name: ${{ github.event.repository.name }}-${{ matrix.toolchain }}
         path: |
-             build/${{ github.event.repository.name }}.7z
+             build/${{ github.event.repository.name }}-${{ matrix.toolchain }}.7z
 
     - name: Deploy pre-release
       uses: softprops/action-gh-release@v1
@@ -53,7 +53,7 @@ jobs:
         token: "${{ secrets.GITHUB_TOKEN }}"
         fail_on_unmatched_files: true
         files: |
-            build/${{ github.event.repository.name }}.7z
+            build/${{ github.event.repository.name }}-${{ matrix.toolchain }}.7z
 
         name: "Latest build"
         tag_name: "Latest"
