@@ -10,10 +10,14 @@ on:
   repository_dispatch:
     types: [run_build]
 
+
 jobs:
-  build-win:
+  build:
+    strategy:
+     matrix:
+       toolchain: ["windows-static-x86","linux-x86"]
     runs-on: ubuntu-latest
-    container: dockcross/windows-static-x86:latest
+    container: dockcross/${{ matrix.toolchain }}:latest
     steps:
 
     - uses: actions/checkout@v2
@@ -23,21 +27,21 @@ jobs:
     - name: Compile project
       run: |
         DATEE=`date '+[%Y-%m-%d]'`
-        mv LICENCE LICENSE.TXT
+        mv LICENCE LICENCE.TXT
         mkdir build
         cd build
         cmake .. -DCMAKE_BUILD_TYPE=Release
         make clean all
-        7z a -t7z Bin2c.7z Bin2c.exe ../LICENSE.TXT ../README.md
+        7z a -t7z ${{ github.event.repository.name }}.7z ${{ github.event.repository.name }}* ../LICENSE.TXT ../README.md
         ls -r
+
     - name: Upload artifacts
       if: ${{ success() }}
       uses: actions/upload-artifact@v2
       with:
-        name: TITLE_CFG_MAKER
+        name: ${{ github.event.repository.name }}
         path: |
-             build/Bin2c.7z
-             build/Bin2c.exe
+             build/${{ github.event.repository.name }}.7z
 
     - name: Deploy pre-release
       uses: softprops/action-gh-release@v1
@@ -46,8 +50,8 @@ jobs:
         token: "${{ secrets.GITHUB_TOKEN }}"
         fail_on_unmatched_files: true
         files: |
-            build/Bin2c.7z
-            build/Bin2c.exe
+            build/${{ github.event.repository.name }}.7z
+
         name: "Latest build"
         tag_name: "Latest"
         prerelease: true
