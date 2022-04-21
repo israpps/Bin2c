@@ -9,6 +9,7 @@ on:
     tags:
       - v*
   pull_request:
+  workflow_dispatch:
   repository_dispatch:
     types: [run_build]
 
